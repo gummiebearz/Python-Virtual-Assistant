@@ -9,13 +9,28 @@ from helper import configs
 import requests
 import geocoder
 
+import pyjokes
+
 ### BOT CLASS MODULE ###
 class Bot:
     def __init__(self):
+        ### GET BOT NAME
+        self.bot_name = configs["BOT_NAME"]
+
+        ### INITIALIZE THE BOT
         self.__ear = sr.Recognizer()
         self.__engine = pyttsx3.init()
         voice = self.__engine.getProperty('voice')
         self.__engine.setProperty('voice', voice.replace("Alex", "samantha"))
+        self.__utilities = ""
+
+        ### READ ALL AVAILABLE UTILITIES FROM utilities.txt
+        try:
+            with open("utilities.txt", "r") as file:
+                utilities = file.read().replace("\n", ", ")
+                self.__utilities = utilities
+        except:
+            print("*** ERROR: Could not open utilities.txt")
     
     # Text-to-speech
     def say(self, text):
@@ -37,6 +52,10 @@ class Bot:
                 return '' 
         except:
             return ''
+    
+    # Get a list of available utilities
+    def get_utilities(self):
+        self.say(f"Available utilities are {self.__utilities}")
     
     # Play music based on user's preferences
     def play_music(self):
@@ -71,29 +90,40 @@ class Bot:
         response = response.json()
 
         self.say(f'Currently, in {response["name"]}, it is {response["main"]["temp"]:.1f} degrees Celcius, with {response["weather"][0]["description"]}.')
+    
+    # Get jokes
+    def get_joke(self):
+        self.say(pyjokes.get_joke())
 
     # Process user's command
     def process_command(self, cmd):
-        if 'play' in cmd and 'music' in cmd:
+        if 'see utilities' in cmd:
+            self.get_utilities()
+        elif 'play' in cmd and 'music' in cmd:
             self.play_music()            
         elif 'weather' in cmd:
             self.get_weather(cmd)
+        elif 'joke' in cmd or 'jokes' in cmd:
+            self.get_joke()
+        else:
+            self.say('Sorry, please say the command again! It starts with "Hey Alexa", followed by your prefered utility. For a list of utilities, please say "Hey Alexa see utilities"')
     
     # Execute the logic
     def run(self):
         while True:
             cmd = self.take_command()
-            print(f"* Command: {cmd}")
+            print(f"* Command: {cmd if cmd != '' and cmd != None else 'Unknown'}")
 
-            if 'exit' in cmd or 'goodbye' in cmd or 'shutdown' in cmd:
+            if 'exit' in cmd or 'goodbye' in cmd or 'shut down' in cmd:
                 self.say('I wish to see you again!')
                 print("BOT SHUTTING DOWN...")
                 break
             elif cmd == '':
-                self.say('Sorry, please say the command again! It starts with "Hey Alexa", followed by the chosen function')
+                self.say('Sorry, please say the command again! It starts with "Hey Alexa", followed by your prefered utility. For a list of utilities, please say "Hey Alexa see utilities"')
                 print("-> Missing required command...")
             else:
                 self.process_command(cmd)
+
             print()
 
             

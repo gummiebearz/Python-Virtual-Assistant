@@ -8,6 +8,8 @@ from helper import configs
 
 import requests
 import geocoder
+
+### BOT CLASS MODULE ###
 class Bot:
     def __init__(self):
         self.__ear = sr.Recognizer()

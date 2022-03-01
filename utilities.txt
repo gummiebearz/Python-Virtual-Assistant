@@ -3,3 +3,4 @@ tell joke
 weather
 time
 today's date
+send email

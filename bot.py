@@ -61,8 +61,6 @@ class Bot:
     # Play music based on user's preferences
     def play_music(self):
             print("__STREAMING MUSIC__")
-            self.say("MUSIC UTILITY")
-            # This print line is needed to know the delay after the bot says before the user can say the command
             print("> Please say the name of the song you want to play <")
 
             with sr.Microphone() as stream:
@@ -77,7 +75,6 @@ class Bot:
     # Get data for current weather in specific location
     def get_weather(self, cmd):
         print("__GET WEATHER__")
-        self.say('WEATHER UTILITY')
         # If location is specified, return data for that location
         if 'in' in cmd:
             loc = cmd.split(' ')[-1]

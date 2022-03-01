@@ -10,4 +10,4 @@ class BotApp():
 
 if __name__ == '__main__':
     app = BotApp()
-    app.run
+    app.run()

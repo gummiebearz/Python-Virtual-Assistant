@@ -43,6 +43,7 @@ class Bot:
                 song = self.__ear.recognize_google(src)
 
             self.say(f"Playing {song} on Youtube")
+            print(f"Current song: {song}")
             pywhatkit.playonyt(song, use_api=True)
     
     def get_weather(self, cmd):

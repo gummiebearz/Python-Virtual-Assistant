@@ -36,9 +36,10 @@ class Bot:
         except:
             return ''
     
+    # Play music based on user's preferences
     def play_music(self):
             print('__PLAYING MUSIC__')
-            self.say('Okay...What music do you want to play?')
+            self.say('Okay...What music do you want me to play?')
 
             with sr.Microphone() as stream:
                 src = self.__ear.listen(stream)
@@ -48,11 +49,14 @@ class Bot:
             print(f"Current song: {song}")
             pywhatkit.playonyt(song, use_api=True)
     
+    # Get data for current weather in specific location
     def get_weather(self, cmd):
         print("__GET WEATHER__")
+        # If location is specified, return data for that location
         if 'in' in cmd:
             loc = cmd.split(' ')[-1]
             url = f"https://api.openweathermap.org/data/2.5/weather?q={loc}&appid={configs['WEATHER_API_KEY']}&units=metric"
+        # Otherwise, get the location based on location of machine running
         else:
             loc = geocoder.ip('me') 
             url = f"https://api.openweathermap.org/data/2.5/weather?lat={loc.latlng[0]}&lon={loc.latlng[1]}&appid={configs['WEATHER_API_KEY']}&units=metric"

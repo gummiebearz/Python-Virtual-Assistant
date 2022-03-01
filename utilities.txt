@@ -1,3 +1,5 @@
 play music
 tell joke
 weather
+time
+today's date

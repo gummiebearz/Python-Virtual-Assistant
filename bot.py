@@ -10,6 +10,7 @@ import requests
 import geocoder
 
 import pyjokes
+import datetime
 
 ### BOT CLASS MODULE ###
 class Bot:
@@ -46,8 +47,8 @@ class Bot:
                 cmd = self.__ear.recognize_google(src)
                 cmd = cmd.lower()
 
-                if 'hey alexa' in cmd:
-                    cmd = cmd.replace('hey alexa', '').strip()
+                if f"hey {self.bot_name}" in cmd:
+                    cmd = cmd.replace(f"hey {self.bot_name}", '').strip()
                     return cmd
                 return '' 
         except:
@@ -94,6 +95,16 @@ class Bot:
     # Get jokes
     def get_joke(self):
         self.say(pyjokes.get_joke())
+    
+    # Get current time
+    def get_time(self):
+        time = datetime.datetime.now().strftime("%I:%M %p")
+        self.say(f"Right now, it is {time}")
+    
+    # Get today's date
+    def get_date(self):
+        date = datetime.datetime.now().strftime("%B %d, %Y")
+        self.say(f"Today's date is {date}")
 
     # Process user's command
     def process_command(self, cmd):
@@ -105,8 +116,12 @@ class Bot:
             self.get_weather(cmd)
         elif 'joke' in cmd or 'jokes' in cmd:
             self.get_joke()
+        elif 'time' in cmd:
+            self.get_time()
+        elif 'today' in cmd and 'date' in cmd:
+            self.get_date()
         else:
-            self.say('Sorry, please say the command again! It starts with "Hey Alexa", followed by your prefered utility. For a list of utilities, please say "Hey Alexa see utilities"')
+            self.say(f'Sorry, please say the command again! It starts with "Hey {self.bot_name}", followed by your prefered utility. For a list of utilities, please say "Hey Alexa see utilities"')
     
     # Execute the logic
     def run(self):
@@ -119,7 +134,7 @@ class Bot:
                 print("BOT SHUTTING DOWN...")
                 break
             elif cmd == '':
-                self.say('Sorry, please say the command again! It starts with "Hey Alexa", followed by your prefered utility. For a list of utilities, please say "Hey Alexa see utilities"')
+                self.say(f'Sorry, please say the command again! It starts with "Hey {self.bot_name}", followed by your prefered utility. For a list of utilities, please say "Hey Alexa see utilities"')
                 print("-> Missing required command...")
             else:
                 self.process_command(cmd)

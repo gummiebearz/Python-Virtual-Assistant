@@ -38,10 +38,14 @@ def take_command():
 def process_cmd(cmd):
     print(f"Command: {cmd}")
     if 'play' in cmd:
-        music = cmd.replace('play ', '')
-        talk(f"Playing {music} on Youtube")
+
+        with sr.Microphone() as stream:
+            src = ear.listen(stream)
+            song = ear.recognize_google(src)
+            song = song.lower()
+        talk(f"Playing {song} on Youtube")
         print(f"Playing music...")
-        pywhatkit.playonyt(music, use_api=True)
+        pywhatkit.playonyt(song, use_api=True)
 
     elif 'time' in cmd:
         current_time = datetime.now().strftime("%I:%M %p")

@@ -1,3 +1,7 @@
+### THIS IS THE BOILERPLATE FOR VIRTUAL ASSISTANT 
+### DRAFT VERSION
+### TO BE MODULARIZED
+
 import speech_recognition as sr
 import pyttsx3
 import pywhatkit

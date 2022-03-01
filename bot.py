@@ -17,10 +17,12 @@ class Bot:
         voice = self.__engine.getProperty('voice')
         self.__engine.setProperty('voice', voice.replace("Alex", "samantha"))
     
+    # Text-to-speech
     def say(self, text):
         self.__engine.say(text)
         self.__engine.runAndWait()
     
+    # Take command from user
     def take_command(self):
         try:
             with sr.Microphone() as stream:
@@ -38,20 +40,24 @@ class Bot:
     
     # Play music based on user's preferences
     def play_music(self):
-            print('__PLAYING MUSIC__')
-            self.say('Okay...What music do you want me to play?')
+            print("__STREAMING MUSIC__")
+            self.say("MUSIC UTILITY")
+            # This print line is needed to know the delay after the bot says before the user can say the command
+            print("> Please say the name of the song you want to play <")
 
             with sr.Microphone() as stream:
                 src = self.__ear.listen(stream)
                 song = self.__ear.recognize_google(src)
+                song = song.upper()
 
             self.say(f"Playing {song} on Youtube")
-            print(f"Current song: {song}")
+            print(f"> Current song: {song}")
             pywhatkit.playonyt(song, use_api=True)
     
     # Get data for current weather in specific location
     def get_weather(self, cmd):
         print("__GET WEATHER__")
+        self.say('WEATHER UTILITY')
         # If location is specified, return data for that location
         if 'in' in cmd:
             loc = cmd.split(' ')[-1]
@@ -66,18 +72,20 @@ class Bot:
 
         self.say(f'Currently, in {response["name"]}, it is {response["main"]["temp"]:.1f} degrees Celcius, with {response["weather"][0]["description"]}.')
 
+    # Process user's command
     def process_command(self, cmd):
         if 'play' in cmd and 'music' in cmd:
             self.play_music()            
         elif 'weather' in cmd:
             self.get_weather(cmd)
     
+    # Execute the logic
     def run(self):
         while True:
             cmd = self.take_command()
             print(f"* Command: {cmd}")
 
-            if 'exit' in cmd or 'goodbye' in cmd:
+            if 'exit' in cmd or 'goodbye' in cmd or 'shutdown' in cmd:
                 self.say('I wish to see you again!')
                 print("BOT SHUTTING DOWN...")
                 break
@@ -86,6 +94,7 @@ class Bot:
                 print("-> Missing required command...")
             else:
                 self.process_command(cmd)
+            print()
 
             
 

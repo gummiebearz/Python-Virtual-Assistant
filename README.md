@@ -2,7 +2,7 @@
 
 This virtual assistant is designed with simplicity in mind, which performs basic functionalities that assist users in their daily lives
 
-* CONTINUING GOAL: OPTIMIZE THE SPEED OF THE BOT
+* __CONTINUING GOAL: OPTIMIZE THE SPEED OF THE BOT__
 ### List of utilities 
 Please refer to file `utilities.txt`
 ### Setup

@@ -118,7 +118,7 @@ class Bot:
         elif 'today' in cmd and 'date' in cmd:
             self.get_date()
         else:
-            self.say(f'Sorry, please say the command again! It starts with "Hey {self.bot_name}", followed by your prefered utility. For a list of utilities, please say "Hey Alexa see utilities"')
+            self.say(f'Sorry, please say the command again! It starts with "Hey {self.bot_name}", followed by your prefered utility. For a list of utilities, please say "Hey {self.bot_name} see utilities"')
     
     # Execute the logic
     def run(self):
@@ -126,12 +126,12 @@ class Bot:
             cmd = self.take_command()
             print(f"* Command: {cmd if cmd != '' and cmd != None else 'Unknown'}")
 
-            if 'exit' in cmd or 'goodbye' in cmd or 'shut down' in cmd:
+            if 'exit' in cmd or 'goodbye' in cmd or 'shut down' in cmd or 'shutdown' in cmd:
                 self.say('I wish to see you again!')
                 print("BOT SHUTTING DOWN...")
                 break
             elif cmd == '':
-                self.say(f'Sorry, please say the command again! It starts with "Hey {self.bot_name}", followed by your prefered utility. For a list of utilities, please say "Hey Alexa see utilities"')
+                self.say(f'Sorry, please say the command again! It starts with "Hey {self.bot_name}", followed by your prefered utility. For a list of utilities, please say "Hey {self.bot_name} see utilities"')
                 print("-> Missing required command...")
             else:
                 self.process_command(cmd)

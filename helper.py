@@ -15,7 +15,7 @@ try:
             name, email = line
             emails[name.lower()] = email.lower()
 except:
-    emails = {}
+    emails = None
     print(f"*** ERROR: Could not open file {configs['FILE_EMAILS']}")
 
 ### LOAD UTILITIES FROM utilities.txt
@@ -23,5 +23,5 @@ try:
     with open(configs["FILE_UTILITIES"], "r") as file:
         utilities = file.read().replace("\n", ", ")
 except:
-    utilities = ""
+    utilities = None
     print(f"*** ERROR: Could not open file {configs['FILE_UTILITIES']}")

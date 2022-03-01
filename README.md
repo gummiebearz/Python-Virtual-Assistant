@@ -5,6 +5,11 @@ This virtual assistant is designed with simplicity in mind, which performs basic
 * __CONTINUING GOAL: OPTIMIZE THE SPEED OF THE BOT__
 ### List of utilities 
 Please refer to file `utilities.txt`
+
+### HIGHLIGHTED UTILITIES 
+- __Send email:__ Sending email, including Subject line, to a person in the contact list (Contact list is a hidden .txt file)
+- __Play music:__ Playing music from Youtube
+
 ### Setup
 - Clone this repo
 - Create a virtual environment: `python3 -m venv <path_to_virtual_env>` (i.e `python3 -m venv myenv/.`)

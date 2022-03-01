@@ -5,7 +5,7 @@ import pywhatkit
 from AppKit import *
 
 from helper import configs
-from helper import emails
+from helper import emails, utilities
 
 import requests
 import geocoder
@@ -27,21 +27,9 @@ class Bot:
         self.__engine = pyttsx3.init()
         voice = self.__engine.getProperty('voice')
         self.__engine.setProperty('voice', voice.replace("Alex", "samantha"))
-        self.__utilities = ""
-        self.__emails = {}
+        self.__utilities = utilities if utilities is not None else ""
+        self.__emails = emails if emails is not None else {}
 
-        ### READ ALL AVAILABLE UTILITIES FROM utilities.txt
-        try:
-            with open("utilities.txt", "r") as file:
-                utilities = file.read().replace("\n", ", ")
-                self.__utilities = utilities
-        except:
-            print("*** ERROR: Could not open utilities.txt")
-        
-        ### STORE ALL EMAILS AS DICT
-        for name, address in emails.items():
-            self.__emails[name] = address
-    
     # Brief description of bot
     def __str__(self):
         return f"Hello. This is {self.bot_name.upper()}, your virtual assistant."
@@ -224,4 +212,5 @@ if __name__ == '__main__':
     bot = Bot()
     # bot.run()
     print(bot.emails)
+    print(bot.utilities)
     print(bot)

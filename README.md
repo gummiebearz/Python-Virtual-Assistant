@@ -9,7 +9,7 @@ Please refer to file `utilities.txt`
 - Clone this repo
 - Create a virtual environment: `python3 -m venv <path_to_virtual_env>` (i.e `python3 -m venv myenv/.`)
 - Download the required packages: `pip install -r requirements.txt` <br/>
-__Make sure to have `SpeechRecognition`, `PyAudio` and `pyttsx3` installed for the skeleton to function__
+__Make sure to have `SpeechRecognition`, `PyAudio` and `pyttsx3` installed for the skeleton to function__<br/>
 __Any packages not listed in `requirements.txt` are python built-in packages__
 
 #### To get Weather Data

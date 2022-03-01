@@ -1,3 +1,4 @@
 .env_var
 myenv
 __pycache__
+.emails

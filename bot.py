@@ -101,15 +101,12 @@ class Bot:
             print("__STREAMING MUSIC__")
             print("> Please say the name of the song you want to play <")
 
-            with sr.Microphone() as stream:
-                src = self.__ear.listen(stream)
-                song = self.__ear.recognize_google(src)
-                song = song.upper()
+            song = self.get_audio_input()
+            song = song.upper()
 
             self.say(f"Playing {song} on Youtube")
             print(f"> Current song: {song}")
             pywhatkit.playonyt(song, use_api=True)
-            return
     
     # Get data for current weather in specific location
     def get_weather(self, cmd):
@@ -149,25 +146,35 @@ class Bot:
     def send_email(self):
         print("__SEND EMAIL__")
 
-        print("...Getting email information...")
+        try:
+            print("...Getting email information...")
+            self.say("Who is the recipient?")
+            recipient = self.get_audio_input()
+            self.say("What is the email subject?")
+            subject = self.get_audio_input()
+            self.say("What is the message?")
+            message = self.get_audio_input()
 
+            # Initialize an SMTP client
+            server = smtplib.SMTP(configs["EMAIL_DOMAIN"], configs["EMAIL_PORT"])
+            server.starttls()
+            # Make sure to toggle ON 'Less Secure App Access' before login
+            server.login(configs["EMAIL_USER"], configs["EMAIL_PWD"])
 
-        # Initialize an SMTP client
-        server = smtplib.SMTP(configs["EMAIL_DOMAIN"], configs["EMAIL_PORT"])
-        server.starttls()
-        # Make sure to toggle ON 'Less Secure App Access' before login
-        server.login(configs["EMAIL_USER"], configs["EMAIL_PWD"])
-
-        # Initialize email object
-        email = EmailMessage()
-        email["From"] = configs["EMAIL_USER"]
-        # email["To"] = receiver
-        # email["Subject"] = subject
-        # email.set_content(message)
+            # Initialize email object
+            email = EmailMessage()
+            email["From"] = configs["EMAIL_USER"]
+            email["To"] = self.emails[recipient] 
+            email["Subject"] = subject
+            email.set_content(message)
         
-        # Send email
-        server.send_email(email)
-        
+            # Send email
+            server.send_message(email)
+            print(f"Sending email to {self.emails[recipient]}...")
+            self.say("Email sent!")
+
+        except:
+            raise ValueError()
 
     # Process user's command
     def process_command(self, cmd):

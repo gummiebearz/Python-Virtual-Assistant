@@ -7,8 +7,10 @@ This virtual assistant is designed with simplicity in mind, which performs basic
 Please refer to file `utilities.txt`
 
 ### HIGHLIGHTED UTILITIES 
-- __Send email:__ Sending email, including Subject line, to a person in the contact list (Contact list is a hidden .txt file)
+- __Send email:__ Sending email, including Subject line, to a person in the contact list
+- __Add email contact:__ Add a new email contact to the contact list
 - __Play music:__ Playing music from Youtube
+- __Get weather__: Get current weather data for a location (if specified) or the user's location (based on user's public IP address)
 
 ### Setup
 - Clone this repo

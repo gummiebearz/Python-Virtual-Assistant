@@ -27,6 +27,8 @@ class Bot:
         self.__engine = pyttsx3.init()
         voice = self.__engine.getProperty('voice')
         self.__engine.setProperty('voice', voice.replace("Alex", "samantha"))
+
+        # LOAD ALL DATA FROM FILES
         self.__utilities = utilities if len(utilities) > 0 else ""
         self.__emails = emails if len(emails) > 0 else {}
 

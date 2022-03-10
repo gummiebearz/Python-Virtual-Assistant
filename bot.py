@@ -124,6 +124,11 @@ class Bot:
     def send_email(self):
         print("__SEND EMAIL__")
 
+        if len(self.emails) == 0:
+            self.say("Sorry, no emails are in contact list")
+            print(">>> Operation cancelled: No emails in contact list")
+            return
+
         try:
             print("...Getting email information...")
             self.say("Who is the recipient?")
@@ -169,6 +174,7 @@ class Bot:
 
                 if correct in ['n', 'N']:
                     name = input("Please type in the correct name: ")
+
                 else:
                     print("Please enter y/n or Y/N: ")
             
@@ -185,42 +191,78 @@ class Bot:
 
                 if correct in ['n', 'N']:
                     email = input("Please type in the correct email address: ")
+
                 else:
                     print("Please enter y/n or Y/N: ")
-        
-            # Write new contact to file
-            while True:
-                correct = input("Do you want to save this contact? (y/n): ")
-
-                if correct in ['n', 'N']:
-                    self.say("Adding contact cancelled.")
-                    print(">>> Operation cancelled: User chose not to save the contact")
-                elif correct not in ['y', 'Y']:
-                    print("Please enter y/n or Y/N: ")
-
-                try:
-                    if name not in self.emails and self.emails[name] != email:
-                        with open(configs["FILE_EMAILS"], "a") as email_file:
-                            email_file.write(f"{name.lower()},{email.lower()}\n")
-                    
-                        print(f"Adding new contact...")
-                        self.say("Contact added!")
-                    else:
-                        self.say("Contact already exists!")
-                        print(">>> Operation cancelled: Contact already exists")
-
-                except:
-                    print("*** ERROR: Unable to write new contact to file")
-                
-                break
 
         except:
             raise ValueError()
+        
+        # Write new contact to file or edit existing contact
+        while True:
+            correct = input("Do you want to save this contact? (y/n): ")
+
+            if correct == "n" or correct == "N":
+                self.say("Adding contact cancelled.")
+                print(">>> Operation cancelled: User chose not to save the contact")
+                break
+
+            elif correct == "y" or correct == "Y":
+                if name not in self.emails:
+                    self.emails[name] = email
+                    print(f"Adding new contact...")
+                    self.say("Contact added!")
+
+                    break
+
+                else:
+                    if self.emails[name] != email:
+                        while True:
+                            correct = input("This contact name has already been registered. Do you want to overwrite this contact with the new email? (y/n): ")
+
+                            if correct == "n" or correct == "N":
+                                self.say("Overwritting contact cancelled.")
+                                print(">>> Operation cancelled: User chose not to overwrite this contact")
+                                break
+
+                            elif correct == "y" or correct == "Y":
+                                self.emails[name] = email
+                                print(f"Overwriting existing contact...")
+                                self.say("Contact overwritten!")
+                                break
+
+                            else:
+                                print("Please enter y/n or Y/N: ")
+                            
+                        break
+
+                    else:
+                        self.say("Contact already exists with the provided email")
+                        print(">>> Operation cancelled: Contact already exists with the provided email")
+                        break
+
+            else:
+                print("Please enter y/n or Y/N: ")
+    
+    # Shutdown tasks to operate
+    def shutdown_tasks(self):
+        print(">> RUNNING BACKGROUND TASKS BEFORE SHUTDOWN <<")
+
+        # overwrite all emails to email file
+        try:
+            with open(configs["FILE_EMAILS"], "w") as email_file:
+                email_file.write("name,email\n")
+                for name, email in self.emails.items():
+                    email_file.write(f"{name},{email}\n")
+
+        except:
+            print("*** ERROR: Unable to write emails to file")
+        
+        print("Background tasks completed...")
 
 
 if __name__ == '__main__':
     bot = Bot()
-    # bot.run()
     print(bot.emails)
     print(bot.utilities)
     print(bot)

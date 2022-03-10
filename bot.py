@@ -124,15 +124,28 @@ class Bot:
     def send_email(self):
         print("__SEND EMAIL__")
 
-        if len(self.emails) == 0:
-            self.say("Sorry, no emails are in contact list")
-            print(">>> Operation cancelled: No emails in contact list")
-            return
+        print("...Getting email information...")
+        self.say("Who is the recipient?")
+        recipient = self.get_audio_input()
 
-        try:
-            print("...Getting email information...")
-            self.say("Who is the recipient?")
-            recipient = self.get_audio_input()
+        if recipient not in self.emails:
+            self.say("Recipient not found. Do you wish to add to contact list? (YES or NO)")
+            option = self.get_audio_input()
+            while option != "no":
+                if option == "yes":
+                    print('>> Redirecting to "add email contact" utility...')
+                    self.add_email_contact()
+                    self.say("Okay. Let's continue sending the email...")
+                    break
+
+                else:
+                    self.say("Sorry. Please say YES or NO.")
+                    option = self.get_audio_input()
+            
+            if option == "no":
+                self.say(">> Operation cancelled: User chose to not add new contact, therefore cannot send the email")
+                return
+            
             self.say("What is the email subject?")
             subject = self.get_audio_input()
             self.say("What is the message?")
@@ -152,13 +165,18 @@ class Bot:
             email.set_content(message)
         
             # Send email
-            server.send_message(email)
-            print(f"Sending email to {self.emails[recipient]}...")
-            self.say("Email sent!")
+            self.say("Do you want to send this email? (YES or NO)")
+            option = self.get_audio_input()
+            while option != "no":
+                if option == "yes":
+                    server.send_message(email)
+                    print(f"Sending email to {self.emails[recipient]}...")
+                    self.say("Email sent!")
+                    break
+            
+            if option == "no":
+                self.say(">> Operation cancelled: User chose to not send email")
 
-        except:
-            raise ValueError()
-    
     # Add email contact
     def add_email_contact(self):
         print("__ADD EMAIL CONTACT__")
@@ -212,7 +230,6 @@ class Bot:
                     self.emails[name] = email
                     print(f"Adding new contact...")
                     self.say("Contact added!")
-
                     break
 
                 else:

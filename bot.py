@@ -67,22 +67,10 @@ class Bot:
         except:
             raise ValueError()
     
-    # Take command from user
-    def take_command(self):
-        try:
-            cmd = self.get_audio_input()
-
-            if f"hey {self.bot_name}" in cmd:
-                cmd = cmd.replace(f"hey {self.bot_name}", '').strip()
-                return cmd
-            return '' 
-        except:
-            raise ValueError()
-    
     # Get a list of available utilities
     def get_utilities(self):
         print("__GET UTILITIES__")
-        self.say(f"Available utilities are {self.utilities}")
+        self.say(f"Available utilities are {self.utilities}") if self.utilities != "" else self.say("Sorry, no utilities available")
     
     # Play music based on user's preferences
     def play_music(self):
@@ -227,27 +215,6 @@ class Bot:
         except:
             raise ValueError()
 
-    # Process user's command
-    def process_command(self, cmd):
-        if 'see utilities' in cmd:
-            self.get_utilities()
-        elif 'play' in cmd and 'music' in cmd:
-            self.play_music()            
-        elif 'weather' in cmd:
-            self.get_weather(cmd)
-        elif 'joke' in cmd or 'jokes' in cmd:
-            self.get_joke()
-        elif 'time' in cmd:
-            self.get_time()
-        elif 'today' in cmd and 'date' in cmd:
-            self.get_date()
-        elif 'send' in cmd and 'email' in cmd:
-            self.send_email()
-        elif 'add' in cmd and 'email' in cmd:
-            self.add_email_contact()
-        else:
-            self.say(f'Sorry, please say the command again! It starts with "Hey {self.bot_name}", followed by your prefered utility. For a list of utilities, please say "Hey {self.bot_name} see utilities"')
-            
 
 if __name__ == '__main__':
     bot = Bot()

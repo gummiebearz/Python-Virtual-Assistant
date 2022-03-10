@@ -4,3 +4,4 @@ weather
 time
 today's date
 send email
+add email contact

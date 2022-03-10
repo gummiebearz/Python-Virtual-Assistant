@@ -146,36 +146,36 @@ class Bot:
                 self.say(">> Operation cancelled: User chose to not add new contact, therefore cannot send the email")
                 return
             
-            self.say("What is the email subject?")
-            subject = self.get_audio_input()
-            self.say("What is the message?")
-            message = self.get_audio_input()
+        self.say("What is the email subject?")
+        subject = self.get_audio_input()
+        self.say("What is the message?")
+        message = self.get_audio_input()
 
-            # Initialize an SMTP client
-            server = smtplib.SMTP(configs["EMAIL_DOMAIN"], configs["EMAIL_PORT"])
-            server.starttls()
-            # Make sure to toggle ON 'Less Secure App Access' before login
-            server.login(configs["EMAIL_USER"], configs["EMAIL_PWD"])
+        # Initialize an SMTP client
+        server = smtplib.SMTP(configs["EMAIL_DOMAIN"], configs["EMAIL_PORT"])
+        server.starttls()
+        # Make sure to toggle ON 'Less Secure App Access' before login
+        server.login(configs["EMAIL_USER"], configs["EMAIL_PWD"])
 
-            # Initialize email object
-            email = EmailMessage()
-            email["From"] = configs["EMAIL_USER"]
-            email["To"] = self.emails[recipient] 
-            email["Subject"] = subject
-            email.set_content(message)
+        # Initialize email object
+        email = EmailMessage()
+        email["From"] = configs["EMAIL_USER"]
+        email["To"] = self.emails[recipient] 
+        email["Subject"] = subject
+        email.set_content(message)
         
-            # Send email
-            self.say("Do you want to send this email? (YES or NO)")
-            option = self.get_audio_input()
-            while option != "no":
-                if option == "yes":
-                    server.send_message(email)
-                    print(f"Sending email to {self.emails[recipient]}...")
-                    self.say("Email sent!")
-                    break
+        # Send email
+        self.say("Do you want to send this email? (YES or NO)")
+        option = self.get_audio_input()
+        while option != "no":
+            if option == "yes":
+                server.send_message(email)
+                print(f"Sending email to {self.emails[recipient]}...")
+                self.say("Email sent!")
+                break
             
-            if option == "no":
-                self.say(">> Operation cancelled: User chose to not send email")
+        if option == "no":
+            self.say(">> Operation cancelled: User chose to not send email")
 
     # Add email contact
     def add_email_contact(self):

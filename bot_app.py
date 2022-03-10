@@ -36,7 +36,7 @@ class BotApp():
         elif 'add' in cmd and 'email' in cmd:
             self.__bot.add_email_contact()
         else:
-            self.__bot.say(f'Sorry, please say the command again! It starts with "Hey {self.bot_name}", followed by your prefered utility. For a list of utilities, please say "Hey {self.bot_name} see utilities"')
+            self.__bot.say(f'Sorry, please say the command again! It starts with "Hey {self.__bot.bot_name}", followed by your prefered utility. For a list of utilities, please say "Hey {self.__bot.bot_name} see utilities"')
             
     def run(self):
         while True:
@@ -46,7 +46,9 @@ class BotApp():
 
                 if cmd in ['exit', 'goodbye', 'shutdown', 'shut down']:
                     self.__bot.say('I wish to see you again!')
+                    self.__bot.shutdown_tasks()
                     print("BOT SHUTTING DOWN...")
+
                     break
 
                 elif cmd == '':
@@ -61,6 +63,8 @@ class BotApp():
             except ValueError:
                 self.__bot.say('Sorry, there was an error getting audio input. Shutting down...')
                 print("Failed to get audio input. BOT SHUT DOWN!")
+
+                self.__bot.shutdown_tasks()
                 break
     
     def __str__(self):
@@ -68,5 +72,5 @@ class BotApp():
 
 if __name__ == '__main__':
     app = BotApp()
-    # app.run()
-    print(app)
+    app.run()
+    # print(app)

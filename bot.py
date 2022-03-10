@@ -27,8 +27,8 @@ class Bot:
         self.__engine = pyttsx3.init()
         voice = self.__engine.getProperty('voice')
         self.__engine.setProperty('voice', voice.replace("Alex", "samantha"))
-        self.__utilities = utilities if utilities is not None else ""
-        self.__emails = emails if emails is not None else {}
+        self.__utilities = utilities if len(utilities) > 0 else ""
+        self.__emails = emails if len(emails) > 0 else {}
 
     # Brief description of bot
     def __str__(self):
@@ -163,6 +163,69 @@ class Bot:
 
         except:
             raise ValueError()
+    
+    # Add email contact
+    def add_email_contact(self):
+        print("__ADD EMAIL CONTACT__")
+
+        try:
+            self.say("What's the name of the contact?")
+            name = self.get_audio_input()
+
+            while True:
+                correct = input(f"Is the name correct? (y/n) -> {name}: ")
+                if correct in ['y', 'Y']:
+                    break
+
+                if correct in ['n', 'N']:
+                    name = input("Please type in the correct name: ")
+                else:
+                    print("Please enter y/n or Y/N: ")
+            
+            self.say("What's the contact's email address? Please spell it out!")
+            email_parts = self.get_audio_input()
+            email = email_parts.replace(" ", "")
+            email = email.replace("at", "@")
+
+            while True:
+                correct = input(f"Is the email address correct? (y/n) -> {email}: ")
+
+                if correct in ['y', 'Y']:
+                    break
+
+                if correct in ['n', 'N']:
+                    email = input("Please type in the correct email address: ")
+                else:
+                    print("Please enter y/n or Y/N: ")
+        
+            # Write new contact to file
+            while True:
+                correct = input("Do you want to save this contact? (y/n): ")
+
+                if correct in ['n', 'N']:
+                    self.say("Adding contact cancelled.")
+                    print(">>> Operation cancelled: User chose not to save the contact")
+                elif correct not in ['y', 'Y']:
+                    print("Please enter y/n or Y/N: ")
+
+                try:
+                    if name not in self.emails and self.emails[name] != email:
+                        with open(configs["FILE_EMAILS"], "a") as email_file:
+                            email_file.write(f"{name.lower()},{email.lower()}\n")
+                    
+                        print(f"Adding new contact...")
+                        self.say("Contact added!")
+                    else:
+                        self.say("Contact already exists!")
+                        print(">>> Operation cancelled: Contact already exists")
+
+                except:
+                    print("*** ERROR: Unable to write new contact to file")
+                
+                break
+
+        except:
+            raise ValueError()
 
     # Process user's command
     def process_command(self, cmd):
@@ -178,34 +241,12 @@ class Bot:
             self.get_time()
         elif 'today' in cmd and 'date' in cmd:
             self.get_date()
-        elif 'email' in cmd:
+        elif 'send' in cmd and 'email' in cmd:
             self.send_email()
+        elif 'add' in cmd and 'email' in cmd:
+            self.add_email_contact()
         else:
             self.say(f'Sorry, please say the command again! It starts with "Hey {self.bot_name}", followed by your prefered utility. For a list of utilities, please say "Hey {self.bot_name} see utilities"')
-    
-    # Execute the logic
-    def run(self):
-        while True:
-            try:
-                cmd = self.take_command()
-                print(f"* Command: {cmd if cmd != '' and cmd != None else 'Unknown'}")
-
-                if cmd in ['exit', 'goodbye', 'shutdown', 'shut down']:
-                    self.say('I wish to see you again!')
-                    print("BOT SHUTTING DOWN...")
-                    break
-                elif cmd == '':
-                    self.say(f'Sorry, please say the command again! It starts with "Hey {self.bot_name}", followed by your prefered utility. For a list of utilities, please say "Hey {self.bot_name} see utilities"')
-                    print("-> Missing required command...")
-                else:
-                    self.process_command(cmd)
-
-                print()
-            except ValueError:
-                self.say('Sorry, there was an error getting audio input. Shutting down...')
-                print("Failed to get audio input. BOT SHUT DOWN!")
-                break
-
             
 
 if __name__ == '__main__':

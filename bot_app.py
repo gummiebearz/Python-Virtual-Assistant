@@ -38,6 +38,7 @@ class BotApp():
         else:
             self.__bot.say(f'Sorry, please say the command again! It starts with "Hey {self.__bot.bot_name}", followed by your prefered utility. For a list of utilities, please say "Hey {self.__bot.bot_name} see utilities"')
             
+    # Execute the logic
     def run(self):
         while True:
             try:
@@ -52,7 +53,7 @@ class BotApp():
                     break
 
                 elif cmd == '':
-                    self.__bot.say(f'Sorry, please say the command again! It starts with "Hey {self.__bot.bot_name.upper()}", followed by your prefered utility. For a list of utilities, please say "Hey {self.__bot.bot_name.upper()}", see utilities"')
+                    self.__bot.say(f'Sorry, please say the command again! It starts with "Hey {self.__bot.bot_name}", followed by your prefered utility. For a list of utilities, please say "Hey {self.__bot.bot_name}", see utilities"')
                     print("-> Missing required command...")
 
                 else:

@@ -12,6 +12,9 @@ Please refer to file `utilities.txt`
 - __Play music:__ Playing music from Youtube
 - __Get weather__: Get current weather data for a location (if specified) or the user's location (based on user's public IP address)
 
+#### :star: UPGRADES
+- User can now add new email contact when sending an email if the recipient is not in the contact list
+
 ### Setup
 - Clone this repo
 - Create a virtual environment: `python3 -m venv <path_to_virtual_env>` (i.e `python3 -m venv myenv/.`)

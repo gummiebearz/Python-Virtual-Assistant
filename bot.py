@@ -66,8 +66,8 @@ class Bot:
 
                 return cmd.lower() if cmd != '' and cmd != None else ''
 
-        except:
-            raise ValueError()
+        except sr.UnknownValueError:
+            raise sr.UnknownValueError('*** ERROR: Could not get audio input')
     
     # Get a list of available utilities
     def get_utilities(self):
@@ -181,40 +181,37 @@ class Bot:
     def add_email_contact(self):
         print("__ADD EMAIL CONTACT__")
 
-        try:
-            self.say("What's the name of the contact?")
-            name = self.get_audio_input()
+        self.say("What's the name of the contact?")
+        name = self.get_audio_input()
 
-            while True:
-                correct = input(f"Is the name correct? (y/n) -> {name}: ")
-                if correct in ['y', 'Y']:
-                    break
+        while True:
+            correct = input(f"Is the name correct? (y/n) -> {name}: ")
+            if correct in ['y', 'Y']:
+                break
 
-                if correct in ['n', 'N']:
-                    name = input("Please type in the correct name: ")
+            if correct in ['n', 'N']:
+                name = input("Please type in the correct name: ")
 
-                else:
-                    print("Please enter y/n or Y/N: ")
+            else:
+                print("Please enter y/n or Y/N: ")
             
-            self.say("What's the contact's email address? Please spell it out!")
-            email_parts = self.get_audio_input()
-            email = email_parts.replace(" ", "")
-            email = email.replace("at", "@")
+        self.say("What's the contact's email address? Please spell it out!")
+        email_parts = self.get_audio_input()
+        email = email_parts.replace(" ", "")
+        email = email.replace("at", "@")
 
-            while True:
-                correct = input(f"Is the email address correct? (y/n) -> {email}: ")
+        while True:
+            correct = input(f"Is the email address correct? (y/n) -> {email}: ")
 
-                if correct in ['y', 'Y']:
-                    break
+            if correct in ['y', 'Y']:
+                break
 
-                if correct in ['n', 'N']:
-                    email = input("Please type in the correct email address: ")
+            if correct in ['n', 'N']:
+                email = input("Please type in the correct email address: ")
 
-                else:
-                    print("Please enter y/n or Y/N: ")
+            else:
+                print("Please enter y/n or Y/N: ")
 
-        except:
-            raise ValueError()
         
         # Write new contact to file or edit existing contact
         while True:

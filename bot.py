@@ -138,9 +138,8 @@ class Bot:
                     self.say("Okay. Let's continue sending the email...")
                     break
 
-                else:
-                    self.say("Sorry. Please say YES or NO.")
-                    option = self.get_audio_input()
+                self.say("Sorry. Please say YES or NO.")
+                option = self.get_audio_input()
             
             if option == "no":
                 self.say(">> Operation cancelled: User chose to not add new contact, therefore cannot send the email")
@@ -173,6 +172,8 @@ class Bot:
                 print(f"Sending email to {self.emails[recipient]}...")
                 self.say("Email sent!")
                 break
+        
+            option = self.get_audio_input()
             
         if option == "no":
             self.say(">> Operation cancelled: User chose to not send email")

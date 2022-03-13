@@ -4,9 +4,6 @@ import pyttsx3
 import pywhatkit
 from AppKit import *
 
-from helper import configs
-from helper import emails, utilities
-
 import requests
 import geocoder
 
@@ -15,6 +12,10 @@ import datetime
 
 import smtplib
 from email.message import EmailMessage
+
+from helper import configs
+from helper import emails, utilities
+
 
 ### BOT CLASS MODULE ###
 class Bot:
@@ -61,6 +62,9 @@ class Bot:
         try:
             with sr.Microphone() as stream:
                 print('...On listening...')
+                # seconds of non-speaking audio before 
+                # a phrase is considered complete
+                self.__ear.pause_threshold = 0.5
                 src = self.__ear.listen(stream)
                 cmd = self.__ear.recognize_google(src)
 
@@ -129,7 +133,7 @@ class Bot:
         recipient = self.get_audio_input()
 
         if recipient not in self.emails:
-            self.say("Recipient not found. Do you wish to add to contact list? (YES or NO)")
+            self.say("Recipient not found. Do you wish to add to contact list?")
             option = self.get_audio_input()
             while option != "no":
                 if option == "yes":
@@ -142,7 +146,7 @@ class Bot:
                 option = self.get_audio_input()
             
             if option == "no":
-                self.say(">> Operation cancelled: User chose to not add new contact, therefore cannot send the email")
+                self.say(">> Operation aborted: User chose to not add new contact, therefore cannot send the email")
                 return
             
         self.say("What is the email subject?")
@@ -164,7 +168,7 @@ class Bot:
         email.set_content(message)
         
         # Send email
-        self.say("Do you want to send this email? (YES or NO)")
+        self.say("Do you want to send this email?")
         option = self.get_audio_input()
         while option != "no":
             if option == "yes":
@@ -173,91 +177,110 @@ class Bot:
                 self.say("Email sent!")
                 break
         
+            self.say("Sorry. Please say YES or NO.")
             option = self.get_audio_input()
             
         if option == "no":
-            self.say(">> Operation cancelled: User chose to not send email")
+            self.say(">> Operation aborted: User chose to not send email")
 
     # Add email contact
     def add_email_contact(self):
         print("__ADD EMAIL CONTACT__")
 
-        self.say("What's the name of the contact?")
-        name = self.get_audio_input()
+        name = ""
+        email = ""
+        for field in ["name", "email"]:
+            # counter for number of times the user is asked to input the value by voice
+            # default to 2 times max
+            # after 2 times, ask the user the type in the value
+            num_times = 0 
 
-        while True:
-            correct = input(f"Is the name correct? (y/n) -> {name}: ")
-            if correct in ['y', 'Y']:
-                break
+            self.say(f"What's the {field} of the contact? Please spell it out!")
+            user_input = self.get_audio_input()
 
-            if correct in ['n', 'N']:
-                name = input("Please type in the correct name: ")
+            while True:
+                if field == "email":
+                    user_input = user_input.replace(" ", "").replace("at","@")
+                print(f"> {field.upper()}: {user_input}")
 
-            else:
-                print("Please enter y/n or Y/N: ")
+                self.say(f'Is the displayed {field} correct?')
+                option = self.get_audio_input()
+
+                if option == "yes":
+                    break
+
+                if option == "no" and num_times < 2:
+                    self.say(f"My mistake...What's the {field} of the contact? Please spell it out!")
+                    user_input = self.get_audio_input()
+
+                if option != "yes" and option != "no" and num_times < 2:
+                    self.say("Sorry. Please say YES or NO.")
             
-        self.say("What's the contact's email address? Please spell it out!")
-        email_parts = self.get_audio_input()
-        email = email_parts.replace(" ", "")
-        email = email.replace("at", "@")
+                num_times += 1
+                if num_times > 2:
+                    self.say(f"Sorry, I couldn't get the {field} right. Please enter it.")
+                    user_input = input(f"Enter the contact's {field}: ")
+                    break
 
-        while True:
-            correct = input(f"Is the email address correct? (y/n) -> {email}: ")
-
-            if correct in ['y', 'Y']:
-                break
-
-            if correct in ['n', 'N']:
-                email = input("Please type in the correct email address: ")
-
+            if field == "name":
+                name = user_input
             else:
-                print("Please enter y/n or Y/N: ")
+                email = user_input
 
-        
         # Write new contact to file or edit existing contact
-        while True:
-            correct = input("Do you want to save this contact? (y/n): ")
+        self.say("Please look at the email contact information displayed on the screen.")
+        print("----- EMAIL CONTACT -----")
+        print(f"Name: {name:>10}")
+        print(f"Email: {email:>10}")
 
-            if correct == "n" or correct == "N":
-                self.say("Adding contact cancelled.")
-                print(">>> Operation cancelled: User chose not to save the contact")
+        self.say("Do you want to save this contact?")
+        num_times = 0
+        while True:
+            option = self.get_audio_input()
+            
+            if option == "no": 
+                self.say("Saving new contact aborted.")
+                print(">>> Operation aborted: User chose not to save the contact")
                 break
 
-            elif correct == "y" or correct == "Y":
+            if option == "yes":
                 if name not in self.emails:
                     self.emails[name] = email
                     print(f"Adding new contact...")
-                    self.say("Contact added!")
+                    self.say("Email contact saved!")
                     break
 
+                elif self.emails[name] != email:
+                    self.say("This contact name has already been registered. Do you want to overwrite this contact with the new email?")
+
+                    while True:
+                        option = self.get_audio_input()
+                        if option == "no":
+                            self.say("Overwritting email contact aborted.")
+                            print(">>> Operation aborted: User chose not to overwrite this contact")
+                            break
+
+                        if option == "yes":
+                            self.emails[name] = email
+                            print(f"Overwriting existing contact...")
+                            self.say("Email contact overwritten.")
+                            break
+
+                    break # break the outer loop regardless of the option in the above inner loop
+
                 else:
-                    if self.emails[name] != email:
-                        while True:
-                            correct = input("This contact name has already been registered. Do you want to overwrite this contact with the new email? (y/n): ")
+                    self.say("Contact already exists with the provided email")
+                    print(">>> Operation aborted: Contact already exists with the provided email")
+                    break
 
-                            if correct == "n" or correct == "N":
-                                self.say("Overwritting contact cancelled.")
-                                print(">>> Operation cancelled: User chose not to overwrite this contact")
-                                break
+            if option != "yes" and option != "no":
+                self.say("Sorry. Please say YES or NO.")
 
-                            elif correct == "y" or correct == "Y":
-                                self.emails[name] = email
-                                print(f"Overwriting existing contact...")
-                                self.say("Contact overwritten!")
-                                break
-
-                            else:
-                                print("Please enter y/n or Y/N: ")
-                            
-                        break
-
-                    else:
-                        self.say("Contact already exists with the provided email")
-                        print(">>> Operation cancelled: Contact already exists with the provided email")
-                        break
-
-            else:
-                print("Please enter y/n or Y/N: ")
+            num_times += 1
+            if num_times == 2:
+                self.say("Sorry, I couldn't save the contact. Please try again later.")
+                break
+        
     
     # Shutdown tasks to operate
     def shutdown_tasks(self):

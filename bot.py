@@ -28,6 +28,7 @@ class Bot:
         self.__engine = pyttsx3.init()
         voice = self.__engine.getProperty('voice')
         self.__engine.setProperty('voice', voice.replace("Alex", "samantha"))
+        self.__engine.setProperty('rate', 168.0) # set to so-called perfect rate
 
         # LOAD ALL DATA FROM FILES
         self.__utilities = utilities if len(utilities) > 0 else ""

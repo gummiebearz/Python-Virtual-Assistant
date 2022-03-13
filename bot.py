@@ -218,7 +218,7 @@ class Bot:
                 num_times += 1
                 if num_times > 2:
                     self.say(f"Sorry, I couldn't get the {field} right. Please enter it.")
-                    user_input = input(f"Enter the contact's {field}: ")
+                    # user_input = input(f"Enter the contact's {field}: ")
                     break
 
             if field == "name":

@@ -42,7 +42,7 @@ class BotApp():
         elif 'send' in cmd and 'email' in cmd:
             self.__bot.send_email()
         # create new email contact
-        elif 'add' in cmd and 'email' in cmd:
+        elif 'save' in cmd and 'email' in cmd and 'contact' in cmd:
             self.__bot.add_email_contact()
         else:
             self.__bot.say(f'Sorry, please say the command again! It starts with "Hey {self.__bot.bot_name}", followed by your prefered utility. For a list of utilities, please say "Hey {self.__bot.bot_name} see utilities"')

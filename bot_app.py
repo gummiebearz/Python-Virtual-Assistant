@@ -2,6 +2,8 @@
 import speech_recognition as sr
 from bot import Bot
 
+# extern variable for dev mode
+DEBUG = True
 class BotApp():
     def __init__(self):
         self.__bot = Bot()

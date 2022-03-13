@@ -190,8 +190,7 @@ class Bot:
         name = ""
         email = ""
         for field in ["name", "email"]:
-            # counter for number of times the user is asked to input the value by voice
-            # default to 2 times max
+            # counter for number of times the user is asked to input the value by voice (default to 2 times max)
             # after 2 times, ask the user the type in the value
             num_times = 0 
 

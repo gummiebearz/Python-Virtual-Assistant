@@ -4,3 +4,4 @@ PyAudio
 geocoder
 pyjokes
 dotenv
+wikipedia

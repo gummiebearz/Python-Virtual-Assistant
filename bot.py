@@ -32,7 +32,7 @@ class Bot:
         self.__engine = pyttsx3.init()
         voice = self.__engine.getProperty('voice')
         self.__engine.setProperty('voice', voice.replace("Alex", "samantha"))
-        self.__engine.setProperty('rate', 168.0) # set to so-called perfect rate
+        self.__engine.setProperty('rate', 170.0) # set to so-called perfect rate (168 - 170)
 
         # LOAD ALL DATA FROM FILES
         self.__utilities = utilities if len(utilities) > 0 else ""
@@ -326,4 +326,4 @@ if __name__ == '__main__':
     # print(bot.emails)
     # print(bot.utilities)
     # print(bot)
-    bot.wiki_search("Mercury")
+    bot.wiki_search("Donald Trump")

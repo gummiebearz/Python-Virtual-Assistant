@@ -288,7 +288,7 @@ class Bot:
     # wiki search
     def wiki_search(self, search_term):
         try:
-            response = wikipedia.summary(search_term, sentences = 3)
+            response = wikipedia.summary(search_term, sentences = 2)
             self.say(f"According to wikipedia: {response}")
 
         # Throw error if search term is not specific enough
@@ -298,7 +298,7 @@ class Bot:
             option = self.get_audio_input()
 
             if option == "yes":
-                response = wikipedia.summary(suggests[1], sentences = 3)
+                response = wikipedia.summary(suggests[1], sentences = 2)
                 self.say(f"According to wikipedia: {response}")
                 return
             

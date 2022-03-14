@@ -17,6 +17,8 @@ from email.message import EmailMessage
 import wikipedia
 from bs4 import *
 
+import csv
+
 from helper import configs
 from helper import emails, utilities
 
@@ -308,12 +310,15 @@ class Bot:
     def shutdown_tasks(self):
         print(">> RUNNING BACKGROUND TASKS BEFORE SHUTDOWN <<")
 
-        # overwrite all emails to email file
+        # OVERWRITE EXISTING EMAIL FILE WITH NEW VALUES
         try:
             with open(configs["FILE_EMAILS"], "w") as email_file:
-                email_file.write("name,email\n")
+                fieldnames = ['name', 'email']
+                writer = csv.DictWriter(email_file, delimiter = ",", fieldnames = fieldnames)
+
+                writer.writeheader()
                 for name, email in self.emails.items():
-                    email_file.write(f"{name},{email}\n")
+                    writer.writerow({'name': name, 'email': email})
 
         except:
             print("*** ERROR: Unable to write emails to file")
@@ -323,7 +328,7 @@ class Bot:
 
 if __name__ == '__main__':
     bot = Bot()
-    # print(bot.emails)
+    print(bot.emails)
     # print(bot.utilities)
     # print(bot)
-    bot.wiki_search("Donald Trump")
+    # bot.wiki_search("Donald Trump")

@@ -11,9 +11,11 @@ Please refer to file `utilities.txt`
 - __Add email contact:__ Add a new email contact to the contact list
 - __Play music:__ Playing music from Youtube
 - __Get weather__: Get current weather data for a location (if specified) or the user's location (based on user's public IP address)
+- __Wiki search__: Give a short summary of a person or a thing
 
-#### :star: UPGRADES
+#### :star: UPGRADES :star:
 - User can now add new email contact when sending an email if the recipient is not in the contact list
+- All manual inputs from client have now been transformed to text-to-speech inputs
 
 ### Setup
 - Clone this repo

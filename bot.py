@@ -298,7 +298,7 @@ class Bot:
             option = self.get_audio_input()
 
             if option == "yes":
-                response = wikipedia.summary(search_term, sentences = 5)
+                response = wikipedia.summary(suggests[1], sentences = 5)
                 self.say(f"According to wikipedia: {response}")
                 return
             

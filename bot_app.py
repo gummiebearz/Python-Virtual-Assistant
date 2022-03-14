@@ -46,8 +46,11 @@ class BotApp():
         # create new email contact
         elif 'save' in cmd and 'email' in cmd and 'contact' in cmd:
             self.__bot.add_email_contact()
+        elif 'tell me what is' in cmd or 'tell me who is' in cmd:
+            search_term = cmd.replace('tell me what is', '') if 'tell me what is' in cmd else cmd.replace('tell me who is', '')
+            self.__bot.wiki_search(search_term.strip())
         else:
-            self.__bot.say(f'Sorry, please say the command again! It starts with "Hey {self.__bot.bot_name}", followed by your prefered utility. For a list of utilities, please say "Hey {self.__bot.bot_name} see utilities"')
+            self.__bot.say(f"Sorry, I couldn't get that. Please try again.")
             
     # Execute the logic
     def run(self):

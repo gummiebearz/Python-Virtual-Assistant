@@ -13,15 +13,15 @@ try:
                 continue
 
             name, email = line
-            emails[name.lower()] = email.lower()
+            emails[name.strip().lower()] = email.strip().lower()
 except:
     emails = {}
     print(f"*** ERROR: Could not open file {configs['FILE_EMAILS']}")
 
 ### LOAD UTILITIES FROM utilities.txt
 try:
-    with open(configs["FILE_UTILITIES"], "r") as file:
-        utilities = file.read().replace("\n", ", ")
+    with open(configs["FILE_UTILITIES"], "r") as utility_file:
+        utilities = utility_file.read().replace("\n", ", ")
 except:
     utilities = {}
     print(f"*** ERROR: Could not open file {configs['FILE_UTILITIES']}")

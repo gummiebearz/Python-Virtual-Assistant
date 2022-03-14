@@ -1,3 +1,4 @@
+from optparse import AmbiguousOptionError
 import speech_recognition as sr
 import pyttsx3
 
@@ -12,6 +13,9 @@ import datetime
 
 import smtplib
 from email.message import EmailMessage
+
+import wikipedia
+from bs4 import *
 
 from helper import configs
 from helper import emails, utilities
@@ -281,7 +285,25 @@ class Bot:
                 self.say("Sorry, I couldn't save the contact. Please try again later.")
                 break
         
-    
+    # wiki search
+    def wiki_search(self, search_term):
+        try:
+            response = wikipedia.summary(search_term, sentences = 5)
+            self.say(f"According to wikipedia: {response}")
+
+        # Throw error if search term is not specific enough
+        except wikipedia.exceptions.DisambiguationError:
+            suggests = wikipedia.search(search_term, results = 2)
+            self.say(f"Sorry, did you mean {suggests[1]}?")
+            option = self.get_audio_input()
+
+            if option == "yes":
+                response = wikipedia.summary(search_term, sentences = 5)
+                self.say(f"According to wikipedia: {response}")
+                return
+            
+            self.say("Sorry, please be more specific with what your search. Please try again later.")
+
     # Shutdown tasks to operate
     def shutdown_tasks(self):
         print(">> RUNNING BACKGROUND TASKS BEFORE SHUTDOWN <<")
@@ -301,6 +323,7 @@ class Bot:
 
 if __name__ == '__main__':
     bot = Bot()
-    print(bot.emails)
-    print(bot.utilities)
-    print(bot)
+    # print(bot.emails)
+    # print(bot.utilities)
+    # print(bot)
+    bot.wiki_search("Mercury")
